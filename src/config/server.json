@@ -1,0 +1,5 @@
+{
+  "logLevel": "debug",
+  "exporter": "console",
+  "produceMetricInternal": 1000
+}

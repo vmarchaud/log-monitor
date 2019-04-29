@@ -1,0 +1,13 @@
+[
+  {
+    "listener": "file",
+    "options": {
+      "path": "/tmp/access.log",
+      "metric": {
+        "name": "log volume",
+        "unit": "log/sec",
+        "type": "meter"
+      }
+    }
+  }
+]

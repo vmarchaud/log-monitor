@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "declaration": true,
+    "inlineSourceMap": true,
+    "strictNullChecks": true,
+    "traceResolution": false,
+    "downlevelIteration": true,
+    "resolveJsonModule": true,
+    "removeComments": true
+  },
+  "compileOnSave": false
+}

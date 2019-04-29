@@ -1,0 +1,14 @@
+[
+  {
+    "name": "log high volume",
+    "metric": "log volume",
+    "threshold": {
+      "value": 10,
+      "timerange": 30,
+      "operator": ">"
+    },
+    "cooldown": {
+      "timerange": 15
+    }
+  }
+]
