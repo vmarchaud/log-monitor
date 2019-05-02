@@ -3,24 +3,23 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
-    "@types/node": "^11.13.4",
     "async": "^2.0.0-rc.6",
     "blessed": "^0.1.81",
     "blessed-contrib": "^4.8.15",
-    "expect": "^1.20.1",
     "log-driver": "^1.2.7",
     "measured-core": "^1.41.0",
     "moment": "^2.24.0",
-    "ts-node": "^8.0.3",
-    "typescript": "^3.4.3",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "@types/node": "^11.13.4",
     "@types/blessed": "^0.1.11",
+    "typescript": "^3.4.3",
+    "ts-node": "^8.0.3",
     "mocha": "^2.5.3"
   },
   "scripts": {
     "test": "mocha",
-    "start": "ts-node run.ts"
+    "server": "ts-node ./src/entrypoint.ts"
   }
 }

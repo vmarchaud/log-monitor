@@ -3,12 +3,12 @@
     "name": "log high volume",
     "metric": "log volume",
     "threshold": {
-      "value": 10,
-      "timerange": 30,
+      "value": 2,
+      "timerange": 10,
       "operator": ">"
     },
     "cooldown": {
-      "timerange": 15
+      "timerange": 10
     }
   }
 ]

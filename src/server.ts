@@ -10,6 +10,7 @@ import { alerts, listeners, config } from './config'
 import { AlertProducer } from './event-handlers/alert-producer'
 import { MetricProducer } from './event-handlers/metric-producer'
 import * as exporters from './exporters'
+import {Logger} from './types/logger';
 
 export class ServerMonitor implements Server {
 
@@ -23,17 +24,20 @@ export class ServerMonitor implements Server {
 
   private config: ServerConfig
   
-  public logger = new ConsoleLogger(config.logLevel || 'debug')
+  public logger: Logger
 
-  constructor () {
+  constructor (serverConfig?: ServerConfig) {
+    this.config = serverConfig ? Object.assign(config, serverConfig) : config
+    this.logger = new ConsoleLogger(this.config.logLevel || 'debug')
     this.logger.info(`Loading confing`)
+
     // create exporter
-    if (exporters[config.exporter] === undefined) {
-      throw new Error(`Undefined exporter configured: ${config.exporter}`)
+    if (exporters[this.config.exporter] === undefined) {
+      throw new Error(`Undefined exporter configured: ${this.config.exporter}`)
     }
-    const Exporter = exporters[config.exporter]
-    this.exporter = new Exporter() as Exporter
-    this.logger.info(`Loaded ${config.exporter} exporter`)
+    const Exporter = exporters[this.config.exporter]
+    this.exporter = new Exporter(this) as Exporter
+    this.logger.info(`Loaded ${this.config.exporter} exporter`)
 
     this.logger.info('Registering event handlers')
     this.eventHandlers.set(EventType.RAW_LOG, [
@@ -85,7 +89,7 @@ export class ServerMonitor implements Server {
         return listeners
       }
       case ConfigType.SERVER: {
-        return config
+        return this.config
       }
     }
   }
