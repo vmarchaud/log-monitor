@@ -10,7 +10,7 @@ import { alerts, listeners, config } from './config'
 import { AlertProducer } from './event-handlers/alert-producer'
 import { MetricProducer } from './event-handlers/metric-producer'
 import * as exporters from './exporters'
-import {Logger} from './types/logger';
+import { Logger } from './types/logger'
 
 export class ServerMonitor implements Server {
 

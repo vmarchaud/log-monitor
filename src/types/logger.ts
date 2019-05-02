@@ -1,15 +1,15 @@
 
-export type LogFunction = (message: any, ...args: any[]) => void;
+export type LogFunction = (message: any, ...args: any[]) => void
 
 export interface Logger {
-  level?: string;
+  level?: string
 
-  error: LogFunction;
-  warn: LogFunction;
-  info: LogFunction;
-  debug: LogFunction;
+  error: LogFunction
+  warn: LogFunction
+  info: LogFunction
+  debug: LogFunction
 }
 
 export interface LoggerOptions {
-  level?: string;
+  level?: string
 }

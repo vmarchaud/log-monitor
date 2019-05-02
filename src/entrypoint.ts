@@ -1,6 +1,6 @@
 
 import { ServerMonitor } from './server'
-import {ServerConfig} from './types/server';
+import { ServerConfig } from './types/server'
 import * as exporters from './exporters'
 
 const [
