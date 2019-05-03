@@ -3,8 +3,13 @@
 #### docker
 
 I've built an image with everything already built, you only need to run to see the UI:
+```bash
+docker -v "/tmp/access.log:/tmp/access.log" run -it vmarchaud/log-monitor cli
 ```
-docker run -it vmarchaud/log-monitor cli
+
+Then you can inject some logs in the file with the following command (it will write one log every ~1 sec)
+```bash
+while true; do echo '127.0.0.1 - james [09/May/2018:16:00:39 +0000] "GET /report HTTP/1.0" 200 123' >> /tmp/access.log; sleep 1; done
 ```
 
 Note that you will of course need to expose configure it by sharing some paths:
@@ -26,6 +31,11 @@ I've implemented two different exporters:
 
 You can also give the `--debug` flag that will toggle more information about the inner working of the server. Note that you should not run the `cli` exporter with the debug flag.
 If you want to run the unit tests, you can use `yarn test`.
+
+If you want to generate logs:
+```bash
+while true; do echo '127.0.0.1 - james [09/May/2018:16:00:39 +0000] "GET /report HTTP/1.0" 200 123' >> /tmp/access.log; sleep 1; done
+```
 
 ## Implementation details
 
