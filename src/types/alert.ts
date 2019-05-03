@@ -1,5 +1,4 @@
 
-
 export enum AlertOperator {
   GREATER = '>',
   LESS = '<',

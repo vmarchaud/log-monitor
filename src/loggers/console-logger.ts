@@ -9,7 +9,7 @@ export class ConsoleLogger implements Logger {
   static LEVELS = ['silent', 'error', 'warn', 'info', 'debug']
   level?: string
 
-  constructor(options?: LoggerOptions | string | number) {
+  constructor (options?: LoggerOptions | string | number) {
     let opt: LoggerOptions = {}
     if (typeof options === 'number') {
       if (options < 0) {
@@ -17,9 +17,9 @@ export class ConsoleLogger implements Logger {
       } else if (options > ConsoleLogger.LEVELS.length) {
         options = ConsoleLogger.LEVELS.length - 1
       }
-      opt = {level: ConsoleLogger.LEVELS[options]}
+      opt = { level: ConsoleLogger.LEVELS[options] }
     } else if (typeof options === 'string') {
-      opt = {level: options}
+      opt = { level: options }
     } else {
       opt = options || {}
     }
@@ -36,15 +36,15 @@ export class ConsoleLogger implements Logger {
     this.logger.error(util.format(message, ...args))
   }
 
-  warn(message: any, ...args: any[]): void {
+  warn (message: any, ...args: any[]): void {
     this.logger.warn(util.format(message, ...args))
   }
 
-  info(message: any, ...args: any[]): void {
+  info (message: any, ...args: any[]): void {
     this.logger.info(util.format(message, ...args))
   }
 
-  debug(message: any, ...args: any[]): void {
+  debug (message: any, ...args: any[]): void {
     this.logger.debug(util.format(message, ...args))
   }
 }

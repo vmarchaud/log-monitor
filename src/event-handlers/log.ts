@@ -1,8 +1,7 @@
-import { EventHandler, EventLog, EventResult } from "../types/events"
-import { Server, EventType } from "../types/server"
-import { LogParser, LogType}  from "../types/log-parser"
-import { CLFHttpParser } from "../log-parsers/clf-http"
-
+import { EventHandler, EventLog, EventResult } from '../types/events'
+import { Server, EventType } from '../types/server'
+import { LogParser, LogType } from '../types/log-parser'
+import { CLFHttpParser } from '../log-parsers/clf-http'
 
 export class LogEventHandler implements EventHandler {
 
@@ -28,7 +27,7 @@ export class LogEventHandler implements EventHandler {
       result: EventResult.ACK
     }
     this.server.logger.debug('Succesfully parsed raw log event, sending formated log event')
-    this.server.onEvent(newEvent, EventType.FORMATED_LOG)
+    this.server.onEvent(newEvent, EventType.FORMATED_LOG).then().catch()
     return EventResult.ACK
   }
 }

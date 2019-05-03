@@ -73,7 +73,7 @@ export class CLIExporter implements Exporter {
         style: {
           fg: 'blue'
         }
-      },
+      }
     })
     this.logVolume = blessedContrib.gauge({
       label: 'Log volume',
@@ -153,7 +153,6 @@ export class CLIExporter implements Exporter {
       }
     })
 
-  
     // async refresh of the ui
     setInterval(() => {
       this.statusBars.setData({
@@ -182,7 +181,7 @@ export class CLIExporter implements Exporter {
     }, 200)
   }
 
-  async ingest(event: AnyEvent, type: EventType) {
+  async ingest (event: AnyEvent, type: EventType) {
     switch (type) {
       case EventType.ALERT: {
         event = event as AlertEvent
@@ -200,12 +199,12 @@ export class CLIExporter implements Exporter {
       case EventType.METRIC: {
         event = event as MetricEvent
         if (event.metric.name !== this.volumeAlertName) break
-        this.logVolumeValue = event.metric.value  === undefined ? 0 : event.metric.value
+        this.logVolumeValue = event.metric.value === undefined ? 0 : event.metric.value
         break
       }
       case EventType.FORMATED_LOG: {
         event = event as FormatedEventLog
-        const parsed = event.log as FormatedHTTPLog
+        const parsed = event.log
         // update status code data
         if (parsed.status >= 200 && parsed.status < 300) {
           this.statusCodeCounts[0] += 1
@@ -223,7 +222,7 @@ export class CLIExporter implements Exporter {
           let hitCount = this.sectionStats.get(section) || 0
           this.sectionStats.set(section, hitCount + 1)
         }
-        
+
         if (parsed.method === 'GET') {
           this.methodCounts[0] += 1
         } else if (parsed.method === 'POST') {

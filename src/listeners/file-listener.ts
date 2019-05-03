@@ -1,7 +1,7 @@
-import { ListenerOptions, Listener } from "../types/listener"
-import { Server, EventType } from "../types/server"
-import { FSWatcher, watch, promises } from "fs"
-import {EventResult, EventLog} from "../types/events"
+import { ListenerOptions, Listener } from '../types/listener'
+import { Server, EventType } from '../types/server'
+import { FSWatcher, watch, promises } from 'fs'
+import { EventResult, EventLog } from '../types/events'
 
 export interface FileListenerOptions extends ListenerOptions {
   path: string
@@ -44,7 +44,7 @@ export class FileListener implements Listener {
     this.server.logger.info('disabling file listener')
     for (let [ path, meta ] of this.paths) {
       meta.watcher.close()
-      meta.handle.close()
+      await meta.handle.close()
     }
   }
 
@@ -74,7 +74,7 @@ export class FileListener implements Listener {
         }
         watchedPath.offset = offset
         listener.server.logger.debug(`Read ${data.length} new bytes from path ${filepath}`)
-        
+
         const lines = data.split('\n').filter(line => line.length > 0)
         // we will send each line independently for parsing
         for (let line of lines) {
@@ -85,7 +85,7 @@ export class FileListener implements Listener {
             timestamp: new Date(),
             result: EventResult.UNKNOWN
           } as EventLog
-          listener.server.onEvent(event, EventType.RAW_LOG)
+          listener.server.onEvent(event, EventType.RAW_LOG).then().catch()
         }
       } catch (err) {
         return listener.server.logger.error(`Error while tailing (${filepath}): `, err)
@@ -94,7 +94,7 @@ export class FileListener implements Listener {
   }
 
   async watch (options: FileListenerOptions) {
-    if (typeof options.path !== 'string') {
+    if (typeof options.path !== 'string') { // tslint:disable-line
       return this.server.logger.error(`Invalid path given to FileConsumer: `, options.path)
     }
 

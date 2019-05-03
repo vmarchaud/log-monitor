@@ -1,7 +1,7 @@
 
-import { EventHandler, EventResult, MetricEvent, AlertEvent } from "../types/events"
-import { Server, EventType, ConfigType } from "../types/server"
-import { Alert, AlertOperator } from "../types/alert"
+import { EventHandler, EventResult, MetricEvent, AlertEvent, AnyEvent } from '../types/events'
+import { Server, EventType, ConfigType } from '../types/server'
+import { Alert, AlertOperator } from '../types/alert'
 
 export class AlertProducer implements EventHandler {
 
@@ -20,22 +20,31 @@ export class AlertProducer implements EventHandler {
     this.alertsConfig = this.server.load(ConfigType.ALERTS) as Alert[]
   }
 
-  async onEvent (data: MetricEvent, type: EventType) {
+  async onEvent (data: AnyEvent, type: EventType) {
     if (type !== EventType.METRIC) return EventResult.ACK
+    data = data as MetricEvent
     if (data.metric.value === undefined) return EventResult.ACK
 
     // find the alert option for the given metric, otherwise ignore the event
-    const options = this.alertsConfig.find(alertConfig => alertConfig.metric === data.metric.name)
+    const options = this.alertsConfig.find(alertConfig => {
+      return alertConfig.metric === (data as MetricEvent).metric.name
+    })
     if (options === undefined) return EventResult.ACK
     let bucket = this.alertsBuckets.get(options.metric)
     if (bucket === undefined) {
       bucket = []
       this.alertsBuckets.set(options.metric, bucket)
     }
-    bucket.push(data.metric.value)
+    // add newest value
+    bucket.push(data.metric.value || 0)
+    // trim values above timerange
+    const maxTimerange = options.cooldown.timerange > options.threshold.timerange
+      ? options.cooldown.timerange : options.threshold.timerange
+    const maximumValues = maxTimerange || 1
+    bucket.splice(0, bucket.length - maximumValues)
 
     // if a timerange is configured, we will check that there is enough data
-    if (options.threshold.timerange !== undefined && bucket.length < options.threshold.timerange) {
+    if (bucket.length < options.threshold.timerange) {
       return EventResult.ACK
     }
     // compute average value of the alert timerange
@@ -50,7 +59,7 @@ export class AlertProducer implements EventHandler {
       agg += value
       return agg
     }, 0) / options.cooldown.timerange
-    
+
     const isAboveThreshold = this.isAboveThreshold(options, average)
     const isCooledDown = this.isCooledDown(options, averageCooldown)
     const currentState = this.alertsState.get(options.name) || false
@@ -69,14 +78,9 @@ export class AlertProducer implements EventHandler {
         alert: options,
         value: average
       } as AlertEvent
-      this.server.onEvent(event, EventType.ALERT)
+      this.server.onEvent(event, EventType.ALERT).then().catch()
       this.alertsState.set(options.name, !currentState)
     }
-    // trim values above timerange
-    const maxTimerange = options.cooldown.timerange > options.threshold.timerange
-      ? options.cooldown.timerange : options.threshold.timerange
-    const maximumValues = maxTimerange || 1
-    bucket.splice(0, bucket.length - maximumValues)
 
     return EventResult.ACK
   }
@@ -93,7 +97,7 @@ export class AlertProducer implements EventHandler {
         return average < options.threshold.value
       }
       case AlertOperator.NOT_EQUAL: {
-        return average != options.threshold.value
+        return average !== options.threshold.value
       }
     }
   }

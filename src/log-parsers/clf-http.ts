@@ -11,7 +11,6 @@ export class CLFHttpParser implements LogParser {
   private pattern = /^(\S+) (\S+) (\S+) \[([\w:/]+\s[+\-]\d{4})\] "(\S+)\s?(\S+)?\s?(\S+)?" (\d{3}|-) (\d+|-)/m
 
   async parse (line: string) {
-    
     const result = this.pattern.exec(line)
     if (result === null) return null
     const [

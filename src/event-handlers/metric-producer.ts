@@ -1,8 +1,8 @@
-import { EventHandler, EventResult, EventLog, MetricEvent } from "../types/events"
-import { Server, EventType, ConfigType, ServerConfig } from "../types/server"
-import { Metric, MetricType, getMetricConstructor } from "../types/metric"
-import { ListenerConfigEntry } from "../types/listener"
-import { FileListenerOptions } from "../listeners/file-listener"
+import { EventHandler, EventResult, EventLog, MetricEvent } from '../types/events'
+import { Server, EventType, ConfigType, ServerConfig } from '../types/server'
+import { Metric, MetricType, getMetricConstructor } from '../types/metric'
+import { ListenerConfigEntry } from '../types/listener'
+import { FileListenerOptions } from '../listeners/file-listener'
 
 interface InternalMetric extends Metric {
   instance: any
@@ -27,7 +27,7 @@ export class MetricProducer implements EventHandler {
 
   async onEvent (data: EventLog, type: EventType) {
     if (type !== EventType.RAW_LOG) return EventResult.ACK
-    
+
     // find the configuration of the listener to know if we need to compute a metric
     // from the event
     const config = this.listenersConfig
@@ -87,8 +87,7 @@ export class MetricProducer implements EventHandler {
           unit: metric.unit
         }
       } as MetricEvent
-      this.server.onEvent(event, EventType.METRIC)
+      this.server.onEvent(event, EventType.METRIC).then().catch()
     }
   }
-
 }

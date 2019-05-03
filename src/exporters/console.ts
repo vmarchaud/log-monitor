@@ -6,7 +6,7 @@ import { OppositeOperator } from '../types/alert'
 
 export class ConsoleExporter implements Exporter {
 
-  async ingest(event: AnyEvent, type: EventType) {
+  async ingest (event: AnyEvent, type: EventType) {
     switch (type) {
       case EventType.ALERT: {
         event = event as AlertEvent
