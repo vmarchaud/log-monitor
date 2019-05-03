@@ -26,6 +26,7 @@
     "lint": "tslint --project . src/**/*.ts",
     "test": "mocha -r ts-node/register src/**/**/*.spec.ts",
     "ci": "yarn run test && yarn run lint",
-    "server": "ts-node ./src/entrypoint.ts"
+    "dev": "ts-node ./src/entrypoint.ts",
+    "build": "tsc -p tsconfig.json"
   }
 }

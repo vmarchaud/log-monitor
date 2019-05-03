@@ -2,11 +2,10 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
+    "outDir": "build",
     "declaration": true,
     "inlineSourceMap": true,
     "strictNullChecks": true,
-    "traceResolution": false,
-    "downlevelIteration": true,
     "resolveJsonModule": true,
     "removeComments": true
   },
